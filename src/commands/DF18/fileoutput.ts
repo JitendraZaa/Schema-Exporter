@@ -37,8 +37,7 @@ export default class fileoutput extends SfdxCommand {
       const filePath = this.flags.path || "/Users/jitendra.zaaibm.com/Desktop/ObjectInfo.xlsx" ;  
 
       const conn = this.org.getConnection();
-       
-      
+             
       interface sObject {
         activateable: boolean;
         createable: boolean;
@@ -106,19 +105,10 @@ export default class fileoutput extends SfdxCommand {
         var objRes = fldResult as objectDesc;  
         combinedMetadata.push(objRes);
     }
- 
-    /*
-    combinedMetadata.forEach(element => {
-        this.ux.log(element.name);
 
-        element.fields.forEach(fld => {
-            this.ux.log(fld.name);
-        });
-    });
-    */
       await excelUtil.createFile(filePath,combinedMetadata);
       this.ux.log('Excel File created at - '+filePath);
-      //print below if --json flag is used 
+ 
       return { orgId: this.org.getOrgId() , "Dreamforce":"Best time of Year" };
     }
   }
