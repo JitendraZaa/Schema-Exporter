@@ -4,5 +4,7 @@
   "forceFlagDescription": "example boolean flag",
   "errorNoOrgResults": "No results found for the organization '%s'." ,
   "msgFlagDescription" : "Sample Message to echo on console",
-  "pathFlagDescription" : "File Name with full Path to create Excel File"
+  "pathFlagDescription" : "File Name with full Path to create Excel File",
+  "objectFlagDescription" : "Comma Seperated API name of objects to get field metadata Info",
+  "demoFlagDescription" : "Demo Flag"
 }

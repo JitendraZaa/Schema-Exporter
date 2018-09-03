@@ -12,11 +12,8 @@ export default class fileoutput extends SfdxCommand {
   
     public static description = messages.getMessage('commandDescription');
   
-    public static examples = [
-    `Sample example to run command goes here`,
-    `Other example goes here`,
-    `This demo takes flag -m , to echo message`,
-    `Example : sfdx DF:18:helpdemo -u <USERALIAS> -m <Your Message>` 
+    public static examples = [ 
+    `Example : sfdx DF18:fileoutput -u jit27 -m "Account,Lead,Opportunity" ` 
     ];
    
       // Comment this out if your command does not require an org username
@@ -28,28 +25,20 @@ export default class fileoutput extends SfdxCommand {
       // Set this to true if your command requires a project workspace; 'requiresProject' is false by default
       protected static requiresProject = false;
     
-    protected static flagsConfig = {
-      // flag with a value (-n, --name=VALUE)
+    protected static flagsConfig = { 
       msg: flags.string({char: 'm', description: messages.getMessage('msgFlagDescription')}),
       force: flags.boolean({char: 'f', description: messages.getMessage('forceFlagDescription')}),
-      path :  flags.boolean({char: 'p', description: messages.getMessage('pathFlagDescription')})
+      path :  flags.boolean({char: 'p', description: messages.getMessage('pathFlagDescription')})  
     };
    
     //Must implement method - run as per contact from SfdxCommand interface
     public async run(): Promise<core.AnyJson> {
-      const msg = this.flags.msg || 'Best time of year is Dreamforce';     
+      const msg = this.flags.msg  ;     
       const filePath = this.flags.path || "/Users/jitendra.zaaibm.com/Desktop/ObjectInfo.xlsx" ;  
-      
+
       const conn = this.org.getConnection();
-      const query = 'Select Id, Name From Account';
-
-      // The type we are querying for
-      interface Account {
-        Id: string;
-        Name: string;
-      }
-
        
+      
       interface sObject {
         activateable: boolean;
         createable: boolean;
@@ -76,38 +65,59 @@ export default class fileoutput extends SfdxCommand {
         updateable: boolean;
       }
 
+      interface fieldInfo{
+        label : string;
+        name : string;
+        custom : boolean;
+        inlineHelpText : string ;
+      }
+      interface objectDesc{
+        name : string;
+        fields:Array<fieldInfo>;
+      }
+
       interface sobjectRes{
         encoding:string;
         maxBatchSize : number;
-        sobjects : [{sObject}];
+        sobjects : Array<sObject>;
+    }
+ 
+    //this.ux.log(this.flags.objects);
+
+    var objNames = new Array<String>();
+    var combinedMetadata = new Array<objectDesc>();
+
+    if(msg){ 
+        var objectContext = msg.split(',');
+        objectContext.forEach(element => {
+            objNames.push(element); 
+        });
+    }else{
+        const objNameResult = await conn.request('/services/data/v43.0/sobjects'); 
+        var sObjectRef = objNameResult as sobjectRes;    
+        for(var i=0;i<sObjectRef.sobjects.length;i++){       
+            objNames.push(sObjectRef.sobjects[i].name);   
+        }
     }
 
+    for(var i =0 ; i< objNames.length; i++){
+        this.ux.log('Getting Field Metadata From : '+objNames[i]);
+        let fldResult = await conn.request('/services/data/v43.0/sobjects/'+objNames[i]+'/describe');
+        var objRes = fldResult as objectDesc;  
+        combinedMetadata.push(objRes);
+    }
+ 
+    /*
+    combinedMetadata.forEach(element => {
+        this.ux.log(element.name);
 
-      //const result = await conn.query<Account>(query);
-
-      const result2 = await conn.request('/services/data/v43.0/sobjects');
-
-      
-/*
-      if (!result.records || result.records.length <= 0) {
-        throw new core.SfdxError(messages.getMessage('errorNoOrgResults', [this.org.getOrgId()]));
-      }
-
-      sObjectRef.sObjects.forEach(element => {
-        this.ux.log(element.name) ;
-      });
-*/
-      var sObjectRef = result2 as sobjectRes;
-      this.ux.log(sObjectRef.encoding);
-      this.ux.log(sObjectRef.sobjects[0]);
-
-      
-
-     // this.ux.log(sObjectRef);
-      
-    
-     // await excelUtil.createFile(filePath);
-     
+        element.fields.forEach(fld => {
+            this.ux.log(fld.name);
+        });
+    });
+    */
+      await excelUtil.createFile(filePath,combinedMetadata);
+      this.ux.log('Excel File created at - '+filePath);
       //print below if --json flag is used 
       return { orgId: this.org.getOrgId() , "Dreamforce":"Best time of Year" };
     }
