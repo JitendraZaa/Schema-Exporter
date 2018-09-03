@@ -855,6 +855,10 @@
       "version": "0.1.1",
       "dev": true
     },
+    "core-js": {
+      "version": "2.3.0",
+      "dev": true
+    },
     "core-util-is": {
       "version": "1.0.2"
     },
@@ -1030,6 +1034,10 @@
         "is-arrayish": "^0.2.1"
       }
     },
+    "es6-promise": {
+      "version": "3.0.2",
+      "dev": true
+    },
     "escape-string-regexp": {
       "version": "1.0.5"
     },
@@ -1040,6 +1048,17 @@
     "esutils": {
       "version": "2.0.2",
       "dev": true
+    },
+    "excel4node": {
+      "version": "1.5.0",
+      "dev": true,
+      "requires": {
+        "image-size": "0.6.3",
+        "jszip": "3.1.5",
+        "lodash": "4.17.10",
+        "mime": "2.3.1",
+        "xmlbuilder": "10.0.0"
+      }
     },
     "execa": {
       "version": "0.10.0",
@@ -1418,6 +1437,14 @@
       "version": "3.3.10",
       "dev": true
     },
+    "image-size": {
+      "version": "0.6.3",
+      "dev": true
+    },
+    "immediate": {
+      "version": "3.0.6",
+      "dev": true
+    },
     "imurmurhash": {
       "version": "0.1.4"
     },
@@ -1722,6 +1749,39 @@
         "verror": "1.10.0"
       }
     },
+    "jszip": {
+      "version": "3.1.5",
+      "dev": true,
+      "requires": {
+        "core-js": "~2.3.0",
+        "es6-promise": "~3.0.2",
+        "lie": "~3.1.0",
+        "pako": "~1.0.2",
+        "readable-stream": "~2.0.6"
+      },
+      "dependencies": {
+        "process-nextick-args": {
+          "version": "1.0.7",
+          "dev": true
+        },
+        "readable-stream": {
+          "version": "2.0.6",
+          "dev": true,
+          "requires": {
+            "core-util-is": "~1.0.0",
+            "inherits": "~2.0.1",
+            "isarray": "~1.0.0",
+            "process-nextick-args": "~1.0.6",
+            "string_decoder": "~0.10.x",
+            "util-deprecate": "~1.0.1"
+          }
+        },
+        "string_decoder": {
+          "version": "0.10.31",
+          "dev": true
+        }
+      }
+    },
     "just-extend": {
       "version": "3.0.0",
       "dev": true
@@ -1758,6 +1818,13 @@
       "version": "1.0.0",
       "requires": {
         "invert-kv": "^1.0.0"
+      }
+    },
+    "lie": {
+      "version": "3.1.1",
+      "dev": true,
+      "requires": {
+        "immediate": "~3.0.5"
       }
     },
     "load-json-file": {
@@ -1924,6 +1991,10 @@
           "dev": true
         }
       }
+    },
+    "mime": {
+      "version": "2.3.1",
+      "dev": true
     },
     "mime-db": {
       "version": "1.36.0"
@@ -4557,6 +4628,10 @@
     "p-try": {
       "version": "1.0.0"
     },
+    "pako": {
+      "version": "1.0.6",
+      "dev": true
+    },
     "parse-json": {
       "version": "4.0.0",
       "requires": {
@@ -5551,10 +5626,16 @@
       "requires": {
         "sax": ">=0.6.0",
         "xmlbuilder": "~9.0.1"
+      },
+      "dependencies": {
+        "xmlbuilder": {
+          "version": "9.0.7"
+        }
       }
     },
     "xmlbuilder": {
-      "version": "9.0.7"
+      "version": "10.0.0",
+      "dev": true
     },
     "xtend": {
       "version": "4.0.1"

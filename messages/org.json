@@ -2,5 +2,7 @@
   "commandDescription": "Prints a greeting and your org id(s)!",
   "nameFlagDescription": "name to print",
   "forceFlagDescription": "example boolean flag",
-  "errorNoOrgResults": "No results found for the organization '%s'."
+  "errorNoOrgResults": "No results found for the organization '%s'." ,
+  "msgFlagDescription" : "Sample Message to echo on console",
+  "pathFlagDescription" : "File Name with full Path to create Excel File"
 }
