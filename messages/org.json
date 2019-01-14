@@ -3,7 +3,7 @@
   "nameFlagDescription": "name to print",
   "forceFlagDescription": "example boolean flag",
   "errorNoOrgResults": "No results found for the organization '%s'." ,
-  "msgFlagDescription" : "Sample Message to echo on console",
+  "msgFlagDescription" : "comma seperated list of Objects to export",
   "pathFlagDescription" : "File Name with full Path to create Excel File",
   "objectFlagDescription" : "Comma Seperated API name of objects to get field metadata Info",
   "demoFlagDescription" : "Demo Flag"

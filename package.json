@@ -27,7 +27,7 @@
     "sinon": "5",
     "ts-node": "6",
     "typescript": "2.9",
-    "excel4node" : "^1.5.0"
+    "excel4node": "^1.7.0"
   },
   "engines": {
     "node": ">=8.0.0"

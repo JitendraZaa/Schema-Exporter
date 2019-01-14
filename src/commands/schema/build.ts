@@ -13,7 +13,7 @@ export default class fileoutput extends SfdxCommand {
     public static description = messages.getMessage('commandDescription');
   
     public static examples = [ 
-    `Example : sfdx DF18:fileoutput -u jit27 -m "Account,Lead,Opportunity" ` 
+    `Example : sfdx schema:build -u jit27 -m "Account,Lead,Opportunity" ` 
     ];
    
       // Comment this out if your command does not require an org username
@@ -28,12 +28,15 @@ export default class fileoutput extends SfdxCommand {
     protected static flagsConfig = { 
       msg: flags.string({char: 'm', description: messages.getMessage('msgFlagDescription')}),
       force: flags.boolean({char: 'f', description: messages.getMessage('forceFlagDescription')}),
-      path :  flags.boolean({char: 'p', description: messages.getMessage('pathFlagDescription')})  
+      path :  flags.string({char: 'p', description: messages.getMessage('pathFlagDescription')}),
+      objects : flags.string({char: 'o', description: messages.getMessage('objectFlagDescription')}),  
     };
    
     //Must implement method - run as per contact from SfdxCommand interface
     public async run(): Promise<core.AnyJson> {
-      const msg = this.flags.msg  ;     
+      this.ux.log(this.flags.objects);
+
+      const objects = this.flags.objects  ;     
       const filePath = this.flags.path || "/Users/jitendra.zaaibm.com/Desktop/ObjectInfo.xlsx" ;  
 
       const conn = this.org.getConnection();
@@ -69,6 +72,19 @@ export default class fileoutput extends SfdxCommand {
         name : string;
         custom : boolean;
         inlineHelpText : string ;
+        calculatedFormula : string;
+        length : number ;
+        type : string;
+        unique : string ;
+        precision : number;
+        scale : number;
+        encrypted : boolean;
+        externalId : boolean;
+        picklistValues:Array<pickList>;
+      }
+      interface pickList{
+        label : string;
+        value : string;
       }
       interface objectDesc{
         name : string;
@@ -86,8 +102,8 @@ export default class fileoutput extends SfdxCommand {
     var objNames = new Array<String>();
     var combinedMetadata = new Array<objectDesc>();
 
-    if(msg){ 
-        var objectContext = msg.split(',');
+    if(objects){ 
+        var objectContext = objects.split(',');
         objectContext.forEach(element => {
             objNames.push(element); 
         });
