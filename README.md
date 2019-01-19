@@ -1,4 +1,4 @@
-sfdx-object-export
+SFDX Plugin to export Salesforce Schema  
 ==================
 
-Export Salesforce Objects locally
+Export Salesforce Schema in Excel sheet using this plugin built on top of SFDX
