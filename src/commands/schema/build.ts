@@ -13,7 +13,7 @@ export default class fileoutput extends SfdxCommand {
     public static description = messages.getMessage('commandDescription');
   
     public static examples = [ 
-    `Example : sfdx schema:build -u jit27 -m "Account,Lead,Opportunity" ` 
+    `Example : sfdx schema:build -u LWC1_Scratch1 -o "Account,Lead,Opportunity,Contact,AccountTeamMember,OpportunityTeamMember,Campaign,CampaignMember,Product2" ` 
     ];
    
       // Comment this out if your command does not require an org username
@@ -63,8 +63,7 @@ export default class fileoutput extends SfdxCommand {
         retrieveable: boolean;
         searchable: boolean;
         triggerable: boolean;
-        undeletable: boolean;
-        updateable: boolean;
+        undeletable: boolean; 
       }
 
       interface fieldInfo{
@@ -81,6 +80,9 @@ export default class fileoutput extends SfdxCommand {
         encrypted : boolean;
         externalId : boolean;
         picklistValues:Array<pickList>;
+        updateable: boolean;
+        nillable : boolean; 
+        createable: boolean;
       }
       interface pickList{
         label : string;
