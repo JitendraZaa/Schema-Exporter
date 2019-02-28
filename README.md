@@ -26,3 +26,6 @@ Run below sample command against sfdx org `jit11`
 -o : Comma separated list of object to fetch
 -p : Path where excel sheet needs to be generated
 
+If we run below command without any object, it will export every object of Org
+
+`sfdx schema:build -u jit11 -p "some/path/ObjectInfo.xlsx"`
