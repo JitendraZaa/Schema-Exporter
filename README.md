@@ -20,7 +20,7 @@ Navigate to folder `Schema-Exporter` and run command `sfdx plugins:link`
 Assume you have org alias authenticated in sfdx with name `jit11`
 Run below sample command against sfdx org `jit11`
 
-sfdx schema:build -u LWC1_Scratch1 -o "User,Account,Lead" -p "some/path/ObjectInfo.xlsx"
+`sfdx schema:build -u jit11 -o "User,Account,Lead" -p "some/path/ObjectInfo.xlsx"`
 
 -u : Authenticated user
 -o : Comma separated list of object to fetch
