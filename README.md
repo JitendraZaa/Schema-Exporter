@@ -29,3 +29,8 @@ Run below sample command against sfdx org `jit11`
 If we run below command without any object, it will export every object of Org
 
 `sfdx schema:build -u jit11 -p "some/path/ObjectInfo.xlsx"`
+
+### Uninstalling Plugin
+Rune below Command
+
+`sfdx plugins:uninstall "<Path of Plugin Located>"`
