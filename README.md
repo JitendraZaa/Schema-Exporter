@@ -14,7 +14,9 @@ Open COnsole / Terminal and Clone this repository at appropriate location by run
 `https://github.com/JitendraZaa/Schema-Exporter.git`
 
 ### Step 2
-Navigate to folder `Schema-Exporter` and run command `sfdx plugins:link`
+Navigate to folder `Schema-Exporter` then 
+
+run command `sfdx plugins:link`
 
 ### Step 3
 Assume you have org alias authenticated in sfdx with name `jit11`
@@ -34,3 +36,11 @@ If we run below command without any object, it will export every object of Org
 Rune below Command
 
 `sfdx plugins:uninstall "<Path of Plugin Located>"`
+
+### In case of any error while linking plugin, run below commands
+```
+rm -rf node_modules
+yarn cache clean
+yarn
+sfdx plugins:link
+```

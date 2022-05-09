@@ -1,3 +1,4 @@
+
 import {core, flags, SfdxCommand} from '@salesforce/command';
 
 // Initialize Messages with the current plugin directory
@@ -7,6 +8,9 @@ import excelUtil = require('../../scripts/createFile');
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
 const messages = core.Messages.loadMessages('sfdx-object-export', 'org');
+
+//Version of Salesforce API that needs to be connected
+const sfVersion = '55.0';
 
 export default class fileoutput extends SfdxCommand {
   
@@ -35,6 +39,7 @@ export default class fileoutput extends SfdxCommand {
     //Must implement method - run as per contact from SfdxCommand interface
     public async run(): Promise<core.AnyJson> {
       this.ux.log(this.flags.objects);
+      this.ux.startSpinner('Hey ho, the spinner starts');
 
       const objects = this.flags.objects  ;     
       const filePath = this.flags.path || "/Users/jitendra.zaaibm.com/Desktop/ObjectInfo.xlsx" ;  
@@ -110,7 +115,7 @@ export default class fileoutput extends SfdxCommand {
             objNames.push(element); 
         });
     }else{
-        const objNameResult = await conn.request('/services/data/v43.0/sobjects'); 
+        const objNameResult = await conn.request('/services/data/v'+sfVersion+'/sobjects'); 
         var sObjectRef = objNameResult as sobjectRes;    
         for(var i=0;i<sObjectRef.sobjects.length;i++){       
             objNames.push(sObjectRef.sobjects[i].name);   
@@ -119,15 +124,16 @@ export default class fileoutput extends SfdxCommand {
 
     for(var i =0 ; i< objNames.length; i++){
         this.ux.log('Getting Field Metadata From : '+objNames[i]);
-        let fldResult = await conn.request('/services/data/v43.0/sobjects/'+objNames[i]+'/describe');
+        let fldResult = await conn.request('/services/data/v'+sfVersion+'/sobjects/'+objNames[i]+'/describe');
         var objRes = fldResult as objectDesc;  
         combinedMetadata.push(objRes);
     }
 
       await excelUtil.createFile(filePath,combinedMetadata);
       this.ux.log('Excel File created at - '+filePath);
+      this.ux.stopSpinner('Yay, it finished');
  
-      return { orgId: this.org.getOrgId() , "Dreamforce":"Best time of Year" };
+      return { orgId: this.org.getOrgId() , "Plugin":"Schema Exporter SalesforceDX Plugin" };
     }
   }
   
