@@ -10,7 +10,7 @@ import excelUtil = require('../../scripts/createFile');
 const messages = core.Messages.loadMessages('sfdx-object-export', 'org');
 
 //Version of Salesforce API that needs to be connected
-const sfVersion = '55.0';
+const sfVersion = '54.0';
 
 export default class fileoutput extends SfdxCommand {
   
@@ -37,12 +37,11 @@ export default class fileoutput extends SfdxCommand {
     };
    
     //Must implement method - run as per contact from SfdxCommand interface
-    public async run(): Promise<core.AnyJson> {
-      this.ux.log(this.flags.objects);
-      this.ux.startSpinner('Hey ho, the spinner starts');
+    public async run(): Promise<core.AnyJson> { 
+      this.ux.startSpinner('Started Object Export');
 
       const objects = this.flags.objects  ;     
-      const filePath = this.flags.path || "/Users/jitendra.zaaibm.com/Desktop/ObjectInfo.xlsx" ;  
+      const filePath = this.flags.path || "/Users/jitendrazaa/Documents/ObjectInfo.xlsx" ;  
 
       const conn = this.org.getConnection();
              
@@ -88,6 +87,13 @@ export default class fileoutput extends SfdxCommand {
         updateable: boolean;
         nillable : boolean; 
         createable: boolean;
+        aggregatable : boolean;
+        aiPredictionField : boolean;
+        autoNumber : boolean;
+        calculated : boolean; 
+        restrictedPicklist : boolean;
+        referenceTo : Array<String>; 
+
       }
       interface pickList{
         label : string;
@@ -108,30 +114,39 @@ export default class fileoutput extends SfdxCommand {
 
     var objNames = new Array<String>();
     var combinedMetadata = new Array<objectDesc>();
-
+ 
     if(objects){ 
         var objectContext = objects.split(',');
         objectContext.forEach(element => {
             objNames.push(element); 
         });
-    }else{
+    }else{ 
+      try{
         const objNameResult = await conn.request('/services/data/v'+sfVersion+'/sobjects'); 
         var sObjectRef = objNameResult as sobjectRes;    
         for(var i=0;i<sObjectRef.sobjects.length;i++){       
             objNames.push(sObjectRef.sobjects[i].name);   
         }
+      }catch(e){
+        this.ux.log('Error encountered while trying to get object names. Possibilities of invalid API version. Error - '+e.message);
+      } 
     }
 
     for(var i =0 ; i< objNames.length; i++){
         this.ux.log('Getting Field Metadata From : '+objNames[i]);
-        let fldResult = await conn.request('/services/data/v'+sfVersion+'/sobjects/'+objNames[i]+'/describe');
-        var objRes = fldResult as objectDesc;  
-        combinedMetadata.push(objRes);
+        try{
+          let fldResult = await conn.request('/services/data/v'+sfVersion+'/sobjects/'+objNames[i]+'/describe');
+          var objRes = fldResult as objectDesc;  
+          combinedMetadata.push(objRes);
+        }catch(e){
+          this.ux.log('Error while fetching object - '+objNames[i]+', Message - '+e.message); 
+        }
+        
     }
 
-      await excelUtil.createFile(filePath,combinedMetadata);
+      await excelUtil.createFile(filePath,combinedMetadata,this);
       this.ux.log('Excel File created at - '+filePath);
-      this.ux.stopSpinner('Yay, it finished');
+      this.ux.stopSpinner('Export Completed');
  
       return { orgId: this.org.getOrgId() , "Plugin":"Schema Exporter SalesforceDX Plugin" };
     }

@@ -3,6 +3,9 @@ SFDX Plugin to export Salesforce Schema
 
 Export Salesforce Schema in Excel sheet using this plugin built on top of SFDX
 
+## Important Links
+1. [Salesforce Core API Documentation](https://forcedotcom.github.io/sfdx-core/globals.html)
+
 ## Prerequisite 
 * Git
 * SFDX
@@ -31,6 +34,19 @@ Run below sample command against sfdx org `jit11`
 If we run below command without any object, it will export every object of Org
 
 `sfdx schema:build -u jit11 -p "some/path/ObjectInfo.xlsx"`
+
+### Ideas
+1. Add user name, profile name in summary so that we know creatable , updatable etc are on which profile
+2. Reorder fields so that most commonly populated fields displayed first and least populated fields like creatable, formula etc later
+3. try to link all objects with tab. Attempted it but didnt work
+
+```
+//=HYPERLINK("[Budget]June!E56", E56), budget sheet name, June workbook name
+//let linkFormula = 'Hyperlink('+element.name+'!A1,"'+element.name+'")' ;
+//ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).formula(linkFormula);
+//let linkFormula =  element.name; 
+//ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).string(linkFormula);  
+```
 
 ### Uninstalling Plugin
 Rune below Command

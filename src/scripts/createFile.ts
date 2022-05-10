@@ -1,10 +1,8 @@
-import { core, flags, SfdxCommand } from '@salesforce/command';
+
 import child_process = require('child_process');
 import util = require('util');
 var xl = require('excel4node');
-
-const exec = util.promisify(child_process.exec);
-
+ 
 interface fieldInfo{
     label : string;
     name : string;
@@ -15,12 +13,10 @@ interface fieldInfo{
     name : string;
     fields:Array<fieldInfo>;
   }
-
-var combinedMetadata = new Array<objectDesc>();
-
-export async function createFile(fileName,combinedMetadata) {
  
-    process.stdout.write('\nCreating file using Node Module \n');
+
+export async function createFile(fileName,combinedMetadata,context) {
+    
     // Create a new instance of a Workbook class
     var wb = new xl.Workbook();
 
@@ -53,11 +49,11 @@ export async function createFile(fileName,combinedMetadata) {
           });
     
    
-    InformationWorkSheet(wb,combinedMetadata);
+    InformationWorkSheet(wb,combinedMetadata,context);
 
         
-    combinedMetadata.forEach(element => {
-
+    combinedMetadata.forEach(element => { 
+        //context.ux.log(element);
         var ws =  wb.addWorksheet(element.name);
         ws.cell(1,1).string('Label').style(headerStyle);
         ws.cell(1,2).string('Name').style(headerStyle); 
@@ -75,64 +71,114 @@ export async function createFile(fileName,combinedMetadata) {
         ws.cell(1,14).string('Is Creatable').style(headerStyle); 
         ws.cell(1,15).string('Is Updatable').style(headerStyle); 
         ws.cell(1,16).string('Is Required').style(headerStyle); 
+ 
+        for(var i = 0; i< element.fields.length; i++){ 
 
+            var rowNumber = i+2 ;
+            addString(ws, rowNumber, 1, element.fields[i].label, "label" , element.fields[i]) ;
+            addString(ws, rowNumber, 2, element.fields[i].name , "name" , element.fields[i]) ;
+            addString(ws, rowNumber, 3, element.fields[i].inlineHelpText || "", "inline help text" , element.fields[i]) ;
+            addString(ws, rowNumber, 4, element.fields[i].custom ? "No" : "Yes" , "is custom" , element.fields[i]) ;
 
-        for(var i = 0; i< element.fields.length; i++){
-            ws.cell(i+2,1).string(element.fields[i].label);
-            ws.cell(i+2,2).string(element.fields[i].name);
-            ws.cell(i+2,3).string(element.fields[i].inlineHelpText || ""); 
-            ws.cell(i+2,4).string(element.fields[i].custom ? "No" : "Yes"); 
+            addString(ws, rowNumber, 5, element.fields[i].calculatedFormula || "" , "calculated formula" , element.fields[i]) ;
+            addNumber(ws, rowNumber, 6, element.fields[i].length, "length" , element.fields[i]) ;
+            addString(ws, rowNumber, 7, element.fields[i].type || "", "type" , element.fields[i]) ;
+            addString(ws, rowNumber, 8, element.fields[i].unique ? "Yes" : "No" , "unique" , element.fields[i]) ;
 
-            ws.cell(i+2,5).string(element.fields[i].calculatedFormula || ""); 
-            ws.cell(i+2,6).number(element.fields[i].length  ); 
-            ws.cell(i+2,7).string(element.fields[i].type || ""); 
-            ws.cell(i+2,8).string(element.fields[i].unique ? "Yes" : "No"); 
-            ws.cell(i+2,9).number(element.fields[i].precision  ); 
-            ws.cell(i+2,10).number(element.fields[i].scale  ); 
-            ws.cell(i+2,11).string(element.fields[i].encrypted ? "Yes" : "No"); 
-            ws.cell(i+2,12).string(element.fields[i].externalId ? "Yes" : "No"); 
+            addNumber(ws, rowNumber, 9, element.fields[i].precision, "precision", element.fields[i]) ;
+            addNumber(ws, rowNumber, 10, element.fields[i].scale, "scale" , element.fields[i]) ;
+            addString(ws, rowNumber, 11, element.fields[i].encrypted ? "Yes" : "No" , "encrypted" , element.fields[i]) ;
+            addString(ws, rowNumber, 12, element.fields[i].externalId ? "Yes" : "No" , "external Id" , element.fields[i]) ;
+
             let pVal = parsePicklist(element.fields[i].picklistValues);
             ws.cell(i+2,13).string(pVal).style(wrap);  
-            ws.cell(i+2,14).string(element.fields[i].createable ? "Yes" : "No");
-            ws.cell(i+2,15).string(element.fields[i].updateable ? "Yes" : "No");
-            ws.cell(i+2,16).string(element.fields[i].nillable ? "No" : "Yes"); 
+
+            addString(ws, rowNumber, 14, element.fields[i].createable ? "Yes" : "No" , "creatable" , element.fields[i]) ;
+            addString(ws, rowNumber, 15, element.fields[i].updateable ? "Yes" : "No" , "updateable" , element.fields[i]) ;
+            addString(ws, rowNumber, 16, element.fields[i].nillable ? "No" : "Yes" , "nillable" , element.fields[i]) ;
+ 
         } 
     }); 
+
+    /**
+     * This method makes debugging easy if needed while adding string in Workbook
+     * @param ws 
+     * @param row 
+     * @param col 
+     * @param val 
+     * @param propName 
+     * @param field 
+     */
+    function addString(ws, row,col,val,propName,field){
+        try{ 
+            ws.cell(row,col).string(val);
+        }catch(e){
+            context.ux.log('Exception : Property Name - '+propName+' , Field Name - '+field.name+' , Error - '+e.message); 
+        }
+    }
+
+    /**
+     * This method makes debugging easy if needed while adding numbers in Workbook
+     * @param ws 
+     * @param row 
+     * @param col 
+     * @param val 
+     * @param objName 
+     * @param field 
+     */
+    function addNumber(ws, row,col,val,objName,field){
+        try{
+            ws.cell(row,col).number(val);
+        }catch(e){
+            context.ux.log('Object Name - '+objName+' , Field Name - '+field.name+' , Error - '+e.message); 
+        }
+    }
     
     wb.write(fileName); 
 
      //Create First Info Sheet
-    function InformationWorkSheet(wb,combinedMetadata) {
+    function InformationWorkSheet(wb,combinedMetadata,context) {
 
         //Control default column width using sheetoption
         var sheetoption = {
             'sheetFormat': {
                 'defaultColWidth': 30
-            }
+            } 
         };
-        var row_Offset_InfoSheet = 10;
-        var col_Offset_InfoSheet = 2;
+        var row_Offset_InfoSheet = 0;
+        var col_Offset_InfoSheet = 0;
         var ws_info = wb.addWorksheet("Info", sheetoption);
         let rowNumber = 1;
 
         toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Tool Name");
         toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 2 + col_Offset_InfoSheet, "Schema Exporter");
         rowNumber++;
-        toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Created By");
+
+        toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Tool Created By");
         toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 2 + col_Offset_InfoSheet, "Jitendra Zaa");
         rowNumber++;
+
+        toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Connection User name");
+        toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 2 + col_Offset_InfoSheet, context.org.getUsername() );
+        rowNumber++;
+
+        toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Connection URL");
+        toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 2 + col_Offset_InfoSheet, context.org.getConnection().baseUrl() );
+        rowNumber++;
+ 
         toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Version");
         toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 2 + col_Offset_InfoSheet, "1.4.1");
         rowNumber++;
+
         toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 1 + col_Offset_InfoSheet, "Generated Date");
         toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 2 + col_Offset_InfoSheet, new Date(Date.now()).toLocaleString());
         
         rowNumber = 1;
         toolversion(ws_info, headerStyle, rowNumber + row_Offset_InfoSheet, 3 + col_Offset_InfoSheet, "Included Objects");
 
-        combinedMetadata.forEach(element => { 
-            toolversion(ws_info, infoValueStyle, rowNumber + row_Offset_InfoSheet, 4 + col_Offset_InfoSheet, element.name);
-
+        combinedMetadata.forEach(element => {  
+            let linkFormula =  element.name; 
+            ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).string(linkFormula); 
             rowNumber++;
         });
     }
@@ -145,14 +191,20 @@ export async function createFile(fileName,combinedMetadata) {
         }
         
     }
-
-    function parsePicklist(arr){
+        /**
+         * This method handles classic or new Picklist metadata and sends as csv string
+         * @param arr 
+         * @returns 
+         */
+       function parsePicklist(arr){
+        //context.ux.log(arr);
         let retVal = '';
         for(var i = 0;i < arr.length; i++){
-            if(retVal){
-                retVal = retVal+','+arr[i].label ;
+            let tmpVal = arr[i].label ? arr[i].label : arr[i].value ;
+            if(retVal){ 
+                retVal = retVal+','+ tmpVal ;
             }else{
-                retVal = arr[i].label ;
+                retVal = tmpVal ;
             }
             
         }
