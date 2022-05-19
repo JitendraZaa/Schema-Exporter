@@ -39,6 +39,11 @@ If we run below command without any object, it will export every object of Org
 1. Add user name, profile name in summary so that we know creatable , updatable etc are on which profile
 2. Reorder fields so that most commonly populated fields displayed first and least populated fields like creatable, formula etc later
 3. try to link all objects with tab. Attempted it but didnt work
+4. In summary , along with object name, show total field and total custom fields
+5. Show validation rules, page layout, Process builder & trigger associated with Object
+6. Check if object is empty with 0 recoerds. Use SOQL like 'Select Count(ID) FROM object X limit 50000'. It will help to say records are 50k+ or not
+7. How many fields on each pagelyaouts
+8. Which pagelayouts are unused and not assigned against any profile
 
 ```
 //=HYPERLINK("[Budget]June!E56", E56), budget sheet name, June workbook name
