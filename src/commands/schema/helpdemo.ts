@@ -34,6 +34,7 @@ export default class helpdemo extends SfdxCommand {
       force: flags.boolean({char: 'f', description: messages.getMessage('forceFlagDescription')})
     };
    
+    
     //Must implement method - run as per contact from SfdxCommand interface
     public async run(): Promise<core.AnyJson> {
       const msg = this.flags.msg || 'Best time of year is Dreamforce';       

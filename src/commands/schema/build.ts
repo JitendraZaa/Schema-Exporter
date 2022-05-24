@@ -1,5 +1,6 @@
 
 import {core, flags, SfdxCommand} from '@salesforce/command';
+import {objectDesc,sobjectRes} from '../../scripts/pojo';
 
 // Initialize Messages with the current plugin directory
 core.Messages.importMessagesDirectory(__dirname);
@@ -14,7 +15,7 @@ const sfVersion = '54.0';
 
 export default class fileoutput extends SfdxCommand {
   
-    public static description = messages.getMessage('commandDescription');
+    public static description = messages.getMessage('schemaCommandDescription');
   
     public static examples = [ 
     `Example : sfdx schema:build -u LWC1_Scratch1 -o "Account,Lead,Opportunity,Contact,AccountTeamMember,OpportunityTeamMember,Campaign,CampaignMember,Product2" ` 
@@ -41,74 +42,11 @@ export default class fileoutput extends SfdxCommand {
       this.ux.startSpinner('Started Object Export');
 
       const objects = this.flags.objects  ;     
-      const filePath = this.flags.path || "/Users/jitendrazaa/Documents/ObjectInfo.xlsx" ;  
+      const filePath = this.flags.path || "/Users/jitendrazaa/Downloads/ObjectInfo.xlsx" ;  
 
       const conn = this.org.getConnection();
              
-      interface sObject {
-        activateable: boolean;
-        createable: boolean;
-        custom: boolean;
-        customSetting: boolean;
-        deletable: boolean;
-        deprecatedAndHidden: boolean;
-        feedEnabled: boolean;
-        hasSubtypes: boolean;
-        isSubtype: boolean;
-        keyPrefix: string;
-        label: string;
-        labelPlural: string;
-        layoutable: boolean;
-        mergeable: boolean;
-        mruEnabled: boolean;
-        name: string;
-        queryable: boolean;
-        replicateable: boolean;
-        retrieveable: boolean;
-        searchable: boolean;
-        triggerable: boolean;
-        undeletable: boolean; 
-      }
-
-      interface fieldInfo{
-        label : string;
-        name : string;
-        custom : boolean;
-        inlineHelpText : string ;
-        calculatedFormula : string;
-        length : number ;
-        type : string;
-        unique : string ;
-        precision : number;
-        scale : number;
-        encrypted : boolean;
-        externalId : boolean;
-        picklistValues:Array<pickList>;
-        updateable: boolean;
-        nillable : boolean; 
-        createable: boolean;
-        aggregatable : boolean;
-        aiPredictionField : boolean;
-        autoNumber : boolean;
-        calculated : boolean; 
-        restrictedPicklist : boolean;
-        referenceTo : Array<String>; 
-
-      }
-      interface pickList{
-        label : string;
-        value : string;
-      }
-      interface objectDesc{
-        name : string;
-        fields:Array<fieldInfo>;
-      }
-
-      interface sobjectRes{
-        encoding:string;
-        maxBatchSize : number;
-        sobjects : Array<sObject>;
-    }
+      
  
     //this.ux.log(this.flags.objects);
 

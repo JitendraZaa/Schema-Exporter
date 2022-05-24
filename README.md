@@ -53,6 +53,9 @@ If we run below command without any object, it will export every object of Org
 //ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).string(linkFormula);  
 ```
 
+### Known Issue
+1. Handling controlling picklist is trick as per [this documentation](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_calls_describesobjects_describesobjectresult.htm#aboutPicklists) & [this stack exchange](https://salesforce.stackexchange.com/questions/201775/picklists-validfor-attribute) , decoding logic would be needed to know which value is ACTUALLY controlling value. Therefore commenting this WIP code
+
 ### Uninstalling Plugin
 Rune below Command
 
