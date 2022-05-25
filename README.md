@@ -44,6 +44,10 @@ If we run below command without any object, it will export every object of Org
 6. Check if object is empty with 0 recoerds. Use SOQL like 'Select Count(ID) FROM object X limit 50000'. It will help to say records are 50k+ or not
 7. How many fields on each pagelyaouts
 8. Which pagelayouts are unused and not assigned against any profile
+9. Matrix of profile with object permissions 
+```
+SELECT Id, SObjectType, PermissionsRead, PermissionsCreate, PermissionsEdit , PermissionsDelete, PermissionsModifyAllRecords , PermissionsViewAllRecords FROM ObjectPermissions WHERE parentid in (select id from permissionset where PermissionSet.Profile.Name = 'System Administrator')
+```
 
 ```
 //=HYPERLINK("[Budget]June!E56", E56), budget sheet name, June workbook name
