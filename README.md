@@ -45,16 +45,21 @@ If we run below command without any object, it will export every object of Org
 7. How many fields on each pagelyaouts
 8. Which pagelayouts are unused and not assigned against any profile
 9. Matrix of profile with object permissions 
-```
-SELECT Id, SObjectType, PermissionsRead, PermissionsCreate, PermissionsEdit , PermissionsDelete, PermissionsModifyAllRecords , PermissionsViewAllRecords FROM ObjectPermissions WHERE parentid in (select id from permissionset where PermissionSet.Profile.Name = 'System Administrator')
-```
 
+
+### Notes
+1. creating hyperlink cell in excel4node
 ```
 //=HYPERLINK("[Budget]June!E56", E56), budget sheet name, June workbook name
 //let linkFormula = 'Hyperlink('+element.name+'!A1,"'+element.name+'")' ;
 //ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).formula(linkFormula);
 //let linkFormula =  element.name; 
 //ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).string(linkFormula);  
+```
+
+2. Getting object permissions from profile
+```
+SELECT Id, SObjectType, PermissionsRead, PermissionsCreate, PermissionsEdit , PermissionsDelete, PermissionsModifyAllRecords , PermissionsViewAllRecords FROM ObjectPermissions WHERE parentid in (select id from permissionset where PermissionSet.Profile.Name = 'System Administrator')
 ```
 
 ### Known Issue
