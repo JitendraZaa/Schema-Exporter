@@ -57,7 +57,7 @@ If we run below command without any object, it will export every object of Org
 //ws_info.cell( rowNumber + row_Offset_InfoSheet,4 + col_Offset_InfoSheet).string(linkFormula);  
 ```
 
-2. Getting object permissions from profile
+2. Getting object permissions from profile [Blog Link](https://developer.salesforce.com/blogs/engineering/2012/06/using-soql-to-determine-your-users-permissions-2)
 ```
 SELECT Id, SObjectType, PermissionsRead, PermissionsCreate, PermissionsEdit , PermissionsDelete, PermissionsModifyAllRecords , PermissionsViewAllRecords FROM ObjectPermissions WHERE parentid in (select id from permissionset where PermissionSet.Profile.Name = 'System Administrator')
 ```
