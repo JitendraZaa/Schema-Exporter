@@ -63,7 +63,7 @@ SELECT Id, SObjectType, PermissionsRead, PermissionsCreate, PermissionsEdit , Pe
 ```
 
 ### Known Issue
-1. Handling controlling picklist is trick as per [this documentation](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_calls_describesobjects_describesobjectresult.htm#aboutPicklists) & [this stack exchange](https://salesforce.stackexchange.com/questions/201775/picklists-validfor-attribute) , decoding logic would be needed to know which value is ACTUALLY controlling value. Therefore commenting this WIP code
+1. Handling controlling picklist is trick as per [this documentation](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_calls_describesobjects_describesobjectresult.htm#aboutPicklists) & [this stack exchange](https://salesforce.stackexchange.com/questions/201775/picklists-validfor-attribute) , decoding logic would be needed to know which value is ACTUALLY controlling value. Therefore commenting this WIP code. [Solution documented in type script](https://reergymerej.github.io/blog/2021/03/31/base64binary.html)
 
 ### Uninstalling Plugin
 Rune below Command
