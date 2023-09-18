@@ -3,6 +3,10 @@ SFDX Plugin to export Salesforce Schema
 
 Export Salesforce Schema in Excel sheet using this plugin built on top of SFDX
 
+## Capabilities
+1. Export Selcted OR All object Metadata in Excel sheet
+1. Export dependent Picklists in Excel sheet
+
 ## Important Links
 1. [Salesforce Core API Documentation](https://forcedotcom.github.io/sfdx-core/globals.html)
 
