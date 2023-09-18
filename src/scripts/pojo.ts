@@ -58,7 +58,7 @@
     undeletable: boolean; 
   }
 
-  interface fieldInfo{
+  export interface fieldInfo{
     label : string;
     name : string;
     custom : boolean;
@@ -92,12 +92,54 @@
   }
 
   export interface objectDesc{
-    name : string;
-    fields:Array<fieldInfo>;
+    name : string ;
+    fields : Array<fieldInfo> ;
+    recordTypes : Array<pageLayoutInfo> ;
   }
 
   export interface sobjectRes{
     encoding:string;
     maxBatchSize : number;
     sobjects : Array<sObject>;
+  }
+
+
+/**
+ * Detail about recordtype & Layout
+ */
+export interface recordType{
+  active : boolean;
+  developerName : string;
+  layoutId : string;
+  name : string;
+  recordTypeId : string;
+}
+
+/**
+ * List of all Layouts associated with object
+ */
+export interface objectPageLayouts{
+  recordTypeMappings : Array<recordType>;
+  recordTypeSelectorRequired : boolean;
+}
+
+/**
+ * List of fields & access on page layouts
+ */
+export interface pageLayoutInfo{
+  fields? : Array<fieldInfoAdditional>;
+  objectName? : string;
+  recordTypeId? : string;
+  recordTypeName? : string;
+}
+
+/**
+ * Detailed information about fields on pagelayout
+ */
+export interface fieldInfoAdditional{
+  fieldDetail? : fieldInfo;
+  editableForNew? : boolean;
+  editableForUpdate? : boolean;
+  apiName? : string;
+  required? : boolean;
 }

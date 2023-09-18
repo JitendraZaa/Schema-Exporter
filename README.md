@@ -66,6 +66,11 @@ If we run below command without any object, it will export every object of Org
 SELECT Id, SObjectType, PermissionsRead, PermissionsCreate, PermissionsEdit , PermissionsDelete, PermissionsModifyAllRecords , PermissionsViewAllRecords FROM ObjectPermissions WHERE parentid in (select id from permissionset where PermissionSet.Profile.Name = 'System Administrator')
 ```
 
+3. Read Permission Sets
+```
+SELECT ID,Description,HasActivationRequired,IsCustom,IsOwnedByProfile,Label,LicenseId,PermissionSetGroupId,ProfileId,Type FROM PermissionSet Where IsOwnedByProfile = false
+```
+
 ### Known Issue
 1. Handling controlling picklist is trick as per [this documentation](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_calls_describesobjects_describesobjectresult.htm#aboutPicklists) & [this stack exchange](https://salesforce.stackexchange.com/questions/201775/picklists-validfor-attribute) , decoding logic would be needed to know which value is ACTUALLY controlling value. Therefore commenting this WIP code. [Solution documented in type script](https://reergymerej.github.io/blog/2021/03/31/base64binary.html)
 
@@ -81,3 +86,39 @@ yarn cache clean
 yarn
 sfdx plugins:link
 ```
+
+### Troubleshoot & Frequent commands
+- Install Type Script
+
+    `sudo npm install -g typescript`
+
+- Clean Node Cache
+
+    `npm cache clean -f`
+
+- Delete node_module folder
+
+    `rm -rf node_modules`
+
+- Build all needed node modules
+
+    `npm i` Or `npm install`
+
+- Uninstall Salesforce DX
+    ```
+    sudo rm -rf /usr/local/sfdx
+    sudo rm -rf /usr/local/lib/sfdx
+    sudo rm -rf /usr/local/bin/sfdx
+    sudo rm -rf ~/.local/share/sfdx ~/.config/sfdx ~/.cache/sfdx
+    sudo rm -rf ~/Library/Caches/sfdx
+    sudo rm -rf /usr/local/sf
+    sudo rm -rf /usr/local/bin/sf
+    ```
+
+- install Salesforce DX using Node
+
+    `npm install sfdx-cli --global`
+
+- install _sf_ executable
+
+    `npm install @salesforce/cli --global`

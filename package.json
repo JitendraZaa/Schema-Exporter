@@ -8,11 +8,12 @@
     "@oclif/command": "1",
     "@oclif/config": "1",
     "@oclif/errors": "1",
-    "@salesforce/command": "^0.1.6",
+"@oclif/help": "^1.0.1",
+    "@salesforce/command": "0.1.6",
     "tslib": "1"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "1",
+    "@oclif/dev-cli": "^1",
     "@oclif/plugin-help": "1",
     "@oclif/test": "^1",
     "@salesforce/dev-config": "1.1.0",
@@ -21,13 +22,13 @@
     "@types/mocha": "5",
     "@types/node": "10",
     "chai": "^4",
-    "excel4node": "^1.2.1",
-    "globby": "^13.1.1",
-    "mocha": "^10.0.0",
-    "nyc": "^15.1.0",
+ "excel4node": "^1.7.0",
+    "globby": "8",
+    "mocha": "^5",
+    "nyc": "^12",
     "sinon": "5",
     "ts-node": "6",
-    "typescript": "4.7.2"
+    "typescript": "2.9"
   },
   "engines": {
     "node": ">=8.0.0"
